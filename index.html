@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Movie Api | 22 js project</title>
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="./assets/fontawesome/css/all-fonts.min.css" />
+  </head>
+  <body>
+
+    <header class="header">
+      <h2 class="header-title">Movie App</h2>
+      <!-- search form -->
+      <form action="#" class="search-form">
+        <input type="text" placeholder="Search Movie..." class="search-input" />
+        <button type="submit" class="submit-btn">
+          <i class="fa fa-search"></i>
+        </button>
+      </form>
+    </header>
+
+    <!-- main -->
+    <div class="movies-list-container">
+      <!-- box to show loading & error & warning messages -->
+      <div class="condition-box">
+        <!-- skeleton loading -->
+        <div class="loading-box">
+          <div class="card">
+            <div class="card__image"></div>
+            <div class="card__content">
+              <h2 class="card__title"></h2>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card__image"></div>
+            <div class="card__content">
+              <h2 class="card__title"></h2>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card__image"></div>
+            <div class="card__content">
+              <h2 class="card__title"></h2>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card__image"></div>
+            <div class="card__content">
+              <h2 class="card__title"></h2>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card__image"></div>
+            <div class="card__content">
+              <h2 class="card__title"></h2>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card__image"></div>
+            <div class="card__content">
+              <h2 class="card__title"></h2>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card__image"></div>
+            <div class="card__content">
+              <h2 class="card__title"></h2>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card__image"></div>
+            <div class="card__content">
+              <h2 class="card__title"></h2>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card__image"></div>
+            <div class="card__content">
+              <h2 class="card__title"></h2>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card__image"></div>
+            <div class="card__content">
+              <h2 class="card__title"></h2>
+            </div>
+          </div>
+        </div>
+
+        <h2 class="error-text"></h2>
+        <h2 class="warning-text"></h2>
+      </div>
+
+      <!-- movie list -->
+      <div class="movies-list"></div>
+    </div>
+
+    <!-- pagination -->
+    <div class="pagination-box">
+      <button class="pagination-btn disable-btn" id="prev-page-btn">
+        Previous Page
+      </button>
+      <div class="current-page">1</div>
+      <button class="pagination-btn" id="next-page-btn">Next Page</button>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="./main.js"></script>
+  </body>
+</html>
