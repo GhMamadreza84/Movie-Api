@@ -46,7 +46,7 @@ const showMovies = (movies) => {
         <div class="info-box">
           <h4 class="movie-name">${title}</h4>
   
-          <span class="movie-vote ">
+          <span class="movie-vote ${getCLassByVote(vote_average)}">
             ${vote_average}
             <i class="fa fa-star"></i>
           </span>
@@ -60,5 +60,14 @@ const showMovies = (movies) => {
   }
 };
 
+const getCLassByVote = (vote) => {
+  if (vote >= 8) {
+    return "green-vote";
+  } else if (vote <= 5) {
+    return "red-vote";
+  } else {
+    return "orange-vote";
+  }
+};
 // INITIAL CALL
 getMovies();
