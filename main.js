@@ -6,6 +6,14 @@ const searchInput = document.querySelector(".search-input");
 const warningText = document.querySelector(".warning-text");
 const paginationBox = document.querySelector(".pagination-box");
 const headerTitle = document.querySelector(".header-title");
+const nextPageButton = document.getElementById("next-page-btn");
+const prevPageButton = document.getElementById("prev-page-btn");
+const currentPageText = document.querySelector(".current-page");
+
+let currentPage = 1;
+let nextPage = null;
+let totalPages = null;
+let lastUrl = "";
 
 // API DATA
 const API_KEY = "384346cec9e678f6b0e9e958c7e81669";
@@ -15,6 +23,7 @@ const SEARCH_API = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}
 
 // Get Movies From API
 const getMovies = async (url) => {
+  lastUrl = url;
   try {
     const response = await fetch(url);
     const data = await response.json();
@@ -22,8 +31,28 @@ const getMovies = async (url) => {
     loadingBox.style.display = "none";
     errorText.innerHTML = "";
     warningText.innerHTML = "";
-
     paginationBox.style.display = "flex";
+    // update pagination data
+    currentPage = data.page;
+    totalPages = data.total_pages;
+    currentPageText.innerHTML = currentPage;
+    // back to top when changed data
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
+    //  add & remove "disable-btn" class when click prev & next button
+    if (currentPage <= 1) {
+      prevPageButton.classList.add("disable-btn");
+      nextPageButton.classList.remove("disable-btn");
+    } else if (currentPage >= totalPages) {
+      prevPageButton.classList.remove("disable-btn");
+      nextPageButton.classList.add("disable-btn");
+    } else {
+      prevPageButton.classList.remove("disable-btn");
+      nextPageButton.classList.remove("disable-btn");
+    }
     showMovies(data.results);
   } catch (error) {
     errorText.innerHTML = error.message;
@@ -95,10 +124,37 @@ searchForm.addEventListener("submit", (e) => {
   const searchedValue = searchInput.value;
 
   if (searchedValue) {
+    // active loading mode
+    loadingBox.style.display = "grid";
+    moviesList.innerHTML = "";
     getMovies(SEARCH_API + searchedValue);
     searchInput.value = "";
   }
 });
 
+nextPageButton.addEventListener("click", () => {
+  nextPage = currentPage + 1;
+  if (nextPage <= totalPages) {
+    callPage(nextPage);
+  }
+});
+prevPageButton.addEventListener("click", () => {
+  prevPage = currentPage - 1;
+  if (prevPage >= 1) {
+    callPage(prevPage);
+  }
+});
+const callPage = (page) => {
+  const urlSplit = API_URL.split("?");
+  const searchParams = new URLSearchParams(urlSplit[1]);
+  searchParams.set("page", page);
+  const url = urlSplit[0] + "?" + urlSplit[1].toString();
+  getMovies(url);
+  // active loading mode
+  loadingBox.style.display = "grid";
+  moviesList.innerHTML = "";
+  getMovies(SEARCH_API + searchedValue);
+  searchInput.value = "";
+};
 // Initial call
 getMovies(API_URL);
