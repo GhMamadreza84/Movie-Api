@@ -6,18 +6,19 @@ const searchInput = document.querySelector(".search-input");
 const warningText = document.querySelector(".warning-text");
 const paginationBox = document.querySelector(".pagination-box");
 const headerTitle = document.querySelector(".header-title");
-const nextPageButton = document.getElementById("next-page-btn");
-const prevPageButton = document.getElementById("prev-page-btn");
+const nextPageButton = document.querySelector("#next-page-btn");
+const prevPageButton = document.querySelector("#prev-page-btn");
 const currentPageText = document.querySelector(".current-page");
 
 let currentPage = 1;
 let nextPage = null;
+let prevPage = null;
 let totalPages = null;
 let lastUrl = "";
 
 // API DATA
 const API_KEY = "384346cec9e678f6b0e9e958c7e81669";
-const API_URL = `https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=${API_KEY}`;
+const API_URL = `https://api.themoviedb.org/3/discover/movie?sort_by=popularity.desc&api_key=${API_KEY}&page=${currentPage}`;
 const IMAGE_PATH = "https://image.tmdb.org/t/p/w500";
 const SEARCH_API = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=`;
 
@@ -31,18 +32,22 @@ const getMovies = async (url) => {
     loadingBox.style.display = "none";
     errorText.innerHTML = "";
     warningText.innerHTML = "";
+
     paginationBox.style.display = "flex";
+
     // update pagination data
     currentPage = data.page;
     totalPages = data.total_pages;
+
     currentPageText.innerHTML = currentPage;
-    // back to top when changed data
+
+    // back top of the page when data changed
     window.scrollTo({
       top: 0,
       left: 0,
       behavior: "smooth",
     });
-    //  add & remove "disable-btn" class when click prev & next button
+
     if (currentPage <= 1) {
       prevPageButton.classList.add("disable-btn");
       nextPageButton.classList.remove("disable-btn");
@@ -53,6 +58,7 @@ const getMovies = async (url) => {
       prevPageButton.classList.remove("disable-btn");
       nextPageButton.classList.remove("disable-btn");
     }
+
     showMovies(data.results);
   } catch (error) {
     errorText.innerHTML = error.message;
@@ -115,6 +121,7 @@ const getClassByVote = (vote) => {
     return "orange-vote";
   }
 };
+
 // reset page by clicking header title
 headerTitle.addEventListener("click", () => getMovies(API_URL));
 
@@ -127,6 +134,7 @@ searchForm.addEventListener("submit", (e) => {
     // active loading mode
     loadingBox.style.display = "grid";
     moviesList.innerHTML = "";
+
     getMovies(SEARCH_API + searchedValue);
     searchInput.value = "";
   }
@@ -138,23 +146,27 @@ nextPageButton.addEventListener("click", () => {
     callPage(nextPage);
   }
 });
+
 prevPageButton.addEventListener("click", () => {
   prevPage = currentPage - 1;
   if (prevPage >= 1) {
     callPage(prevPage);
   }
 });
+
 const callPage = (page) => {
-  const urlSplit = API_URL.split("?");
-  const searchParams = new URLSearchParams(urlSplit[1]);
-  searchParams.set("page", page);
-  const url = urlSplit[0] + "?" + urlSplit[1].toString();
-  getMovies(url);
   // active loading mode
   loadingBox.style.display = "grid";
   moviesList.innerHTML = "";
-  getMovies(SEARCH_API + searchedValue);
-  searchInput.value = "";
+
+  const urlSplit = lastUrl.split("?");
+  const searchParams = new URLSearchParams(urlSplit[1]);
+  searchParams.set("page", page);
+
+  const url = urlSplit[0] + "?" + searchParams.toString();
+
+  getMovies(url);
 };
+
 // Initial call
 getMovies(API_URL);
